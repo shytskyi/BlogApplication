@@ -1,8 +1,14 @@
-﻿namespace DataLayer.Interfaces
+﻿using Domain;
+
+namespace DataLayer.Interfaces
 {
     public interface IRepository<TEntity>
     {
-        Task Create(TEntity entity);
+        bool Create(TEntity entity);
         Task RemoveById(int id);
+        void Update(TEntity entity);
+        Task<ICollection<TEntity>> GetAll();
+        Task<TEntity> GetById(int id);
+        bool Seve();
     }
 }

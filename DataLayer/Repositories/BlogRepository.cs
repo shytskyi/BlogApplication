@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DataLayer.Repositories
 {
-    public class BlogRepository : IBlogRepository<Blog>, IRepository<Blog>
+    public class BlogRepository : IRepository<Blog>
     {
         private readonly AppDbContext _context;
 
@@ -13,26 +13,29 @@ namespace DataLayer.Repositories
             _context = context;
         }
 
-        public async Task<List<Blog>> GetAll()
+        public async Task<ICollection<Blog>> GetAll()
         {
             return await _context.Blogs
+                .OrderBy(x => x.Title)
                 .Include(x => x.Author)
                 .Include(x => x.Reviews)
-                .Include(x => x.Tags)
+                .Include(x => x.BlogTags).ThenInclude(x => x.Tag)
                 .ToListAsync();
         }
-        public async Task<Blog> GetBlogById(int id)
+        public async Task<Blog> GetById(int id)
         {
             return await _context.Blogs
                 .Include(x => x.Author)
                 .Include(x => x.Reviews)
-                .Include(x => x.Tags)
-                .FirstOrDefaultAsync(x => x.BlogId == id);
+                .Include(x => x.BlogTags).ThenInclude(x => x.Tag)
+                .Where(x => x.BlogId == id)
+                .FirstOrDefaultAsync();
         }
-        public async Task Create(Blog blog)
+
+        public bool Create(Blog blog)
         {
-            await _context.Blogs.AddAsync(blog);
-            await _context.SaveChangesAsync();
+            _context.Blogs.Add(blog);
+            return Seve();
         }
         public async Task RemoveById(int id)
         {
@@ -40,10 +43,16 @@ namespace DataLayer.Repositories
             _context.Blogs.Remove(removedBlog);
             await _context.SaveChangesAsync();
         }
-        public async void Update(Blog blog)
+        public async void Update(Blog entity)
         {
-            _context.Blogs.Update(blog);
+            _context.Blogs.Update(entity);
             await _context.SaveChangesAsync();
+        }
+
+        public bool Seve()
+        {
+            var seved = _context.SaveChanges();
+            return seved > 0 ? true : false;
         }
     }
 }

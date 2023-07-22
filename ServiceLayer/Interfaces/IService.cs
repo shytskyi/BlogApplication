@@ -1,14 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Domain;
 
 namespace ServiceLayer.Interfaces
 {
     public interface IService<TEntity>
     {
-        Task Create(TEntity entity);
+        bool Create(TEntity entity);
         Task RemoveById(int id);
+        void Update(TEntity entity);
+        Task<ICollection<TEntity>> GetAll();
+        Task<TEntity> GetById(int id);
+        bool Exists(int id);
     }
 }

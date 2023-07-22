@@ -11,13 +11,38 @@ namespace ServiceLayer.Services
         {
             _repository = repository;
         }
-        public async Task Create(Review review)
+
+        public bool Create(Review review)
         {
-            await _repository.Create(review);
+            var resp = _repository.Create(review);
+            return resp;
         }
+
         public async Task RemoveById(int id)
         {
             await _repository.RemoveById(id);
+        }
+
+        public void Update(Review entity)
+        {
+            _repository.Update(entity);
+        }
+
+        public Task<ICollection<Review>> GetAll()
+        {
+            return _repository.GetAll();
+        }
+
+        public Task<Review> GetById(int id)
+        {
+            return _repository.GetById(id);
+        }
+
+        public bool Exists(int id)
+        {
+            if (_repository.GetById(id) == null)
+                return false;
+            return true;
         }
     }
 }

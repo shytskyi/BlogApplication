@@ -13,6 +13,7 @@ namespace Domain
         public string LastName { get; set; }
         public int Age { get; set; }
         public string City { get; set; }
-        public int BlogId { get; set; }
+        public Blog Blog { get; set; }
+        public ICollection<Review> Reviews { get; set; }
     }
 }

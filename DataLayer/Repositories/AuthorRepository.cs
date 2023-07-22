@@ -1,15 +1,10 @@
 ﻿using DataLayer.Interfaces;
 using Domain;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataLayer.Repositories
 {
-    public class AuthorRepository : IRepository<Author>
+    public class AuthorRepository : IRepository<Author>, IGetBlog
     {
         private readonly AppDbContext _context;
 
@@ -17,16 +12,44 @@ namespace DataLayer.Repositories
         {
             _context = context;
         }
-        public async Task Create(Author author)
+
+        public bool Create(Author author)
         {
-            await _context.Authors.AddAsync(author);
-            await _context.SaveChangesAsync();
+            _context.Authors.Add(author);
+            return Seve();
         }
         public async Task RemoveById(int id)
         {
             var remove = await _context.Authors.FindAsync(id);
             _context.Authors.Remove(remove);
             await _context.SaveChangesAsync();
+        }
+        public async void Update(Author entity)
+        {
+            _context.Authors.Update(entity);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<ICollection<Author>> GetAll()
+        {
+            return await _context.Authors.ToListAsync();
+        }
+        public async Task<Author> GetById(int id)
+        {
+            return await _context.Authors
+                .Where(x => x.AuthorId == id)
+                .FirstOrDefaultAsync();
+        }
+
+        public async Task<ICollection<Blog>> GetBlogs()
+        {
+            return _context.Blogs.ToList();
+        }
+
+        public bool Seve()
+        {
+            var seved = _context.SaveChanges();
+            return seved > 0 ? true : false;
         }
     }
 }
