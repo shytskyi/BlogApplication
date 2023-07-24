@@ -27,10 +27,10 @@ namespace BlogApplication.Controllers
         [ProducesResponseType(200, Type = typeof(IEnumerable<Tag>))]
         public IActionResult GetTags()
         {
-            var authors = _mapper.Map<List<TagDTO>>(_service.GetAll());
+            var tags = _mapper.Map<List<TagDTO>>(_service.GetAll());
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-            return Ok(authors);
+            return Ok(tags);
         }
 
         [HttpGet("/tag/{tag_id}")]
@@ -41,11 +41,11 @@ namespace BlogApplication.Controllers
             if (!_service.Exists(id))
                 return NotFound();
 
-            var author = _mapper.Map<TagDTO>(_service.GetById(id));
+            var tag = _mapper.Map<TagDTO>(_service.GetById(id));
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            return Ok(author);
+            return Ok(tag);
         }
 
         [HttpGet("blog_by_tag/{tag}")]
@@ -69,10 +69,10 @@ namespace BlogApplication.Controllers
         {
             if (tag == null)
                 return BadRequest(ModelState);
-            var authorExists = _service.GetAll().Result
+            var tagExists = _service.GetAll().Result
                 .Where(a => a.TagName.Trim().ToUpper() == tag.TagName.TrimEnd().ToUpper())
                 .FirstOrDefault();
-            if (authorExists != null)
+            if (tagExists != null)
             {
                 ModelState.AddModelError("", "Author already exists");
                 return StatusCode(422, ModelState);

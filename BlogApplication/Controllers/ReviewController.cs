@@ -24,10 +24,10 @@ namespace BlogApplication.Controllers
         [ProducesResponseType(200, Type = typeof(IEnumerable<Review>))]
         public IActionResult GetReviews()
         {
-            var blogs = _mapper.Map<List<ReviewDTO>>(_service.GetAll());
+            var reviews = _mapper.Map<List<ReviewDTO>>(_service.GetAll());
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-            return Ok(blogs);
+            return Ok(reviews);
         }
 
         [HttpGet("/review/{review_id}")]
@@ -38,11 +38,11 @@ namespace BlogApplication.Controllers
             if (!_service.Exists(id))
                 return NotFound();
 
-            var blog = _mapper.Map<ReviewDTO>(_service.GetById(id));
+            var review = _mapper.Map<ReviewDTO>(_service.GetById(id));
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            return Ok(blog);
+            return Ok(review);
         }
 
         [HttpPost]
