@@ -48,7 +48,7 @@ namespace BlogApplication.Controllers
         [HttpPost]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
-        public IActionResult CreateAuthor([FromBody] ReviewDTO review)
+        public IActionResult CreateReview([FromBody] ReviewDTO review)
         {
             if (review == null)
                 return BadRequest(ModelState);

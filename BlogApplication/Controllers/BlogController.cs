@@ -66,7 +66,7 @@ namespace BlogApplication.Controllers
         [HttpPost]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
-        public IActionResult CreateAuthor([FromBody] BlogDTO blog)
+        public IActionResult CreateBlog([FromBody] BlogDTO blog)
         {
             if (blog == null)
                 return BadRequest(ModelState);
